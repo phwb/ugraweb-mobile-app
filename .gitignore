@@ -1,0 +1,5 @@
+/node_modules/
+/build/
+/framework7/build/
+/framework7/dist/
+/.idea/

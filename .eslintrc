@@ -1,0 +1,7 @@
+{
+  "globals": {
+    "CustomEvent": true,
+    "Dom7": true,
+    "Framework7": true
+  }
+}
