@@ -1,10 +1,9 @@
-'use strict'
-
 /* global buildConfig */
 
 const config = {
   host: 'http://localhost',
-  folder: '/m'
+  folder: '/m',
+  debug: false
 }
 
 export default buildConfig

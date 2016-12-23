@@ -1,0 +1,93 @@
+doctype xml
+widget(xmlns='http://www.w3.org/ns/widgets', id='ru.ugraweb.cafeassorti', version='1.0.2')
+  name Ассорти
+  description Мобильное приложение Кафе «Ассорти»
+  author(email='yvv@ugraweb.ru', href='http://ugraweb.ru') Ugraweb Team
+
+  content(src='index.html')/
+
+  plugin(name='cordova-plugin-whitelist', spec='1.3.0')/
+  plugin(name='cordova-plugin-statusbar', spec='2.2.1')/
+  plugin(name='cordova-plugin-splashscreen', spec='4.0.1')/
+  plugin(name='cordova-plugin-dialogs', spec='1.3.1')/
+
+  // общие настройки приложения http://docs.phonegap.com/phonegap-build/configuring/preferences/
+  preference(name='orientation', value='portrait')/
+  preference(name='permissions', value='none')/
+  preference(name='webviewbounce', value='false')/
+  preference(name='DisallowOverscroll', value='true')/
+
+  // Android only
+  preference(name='android-build-tool', value='gradle')/
+  preference(name='android-minSdkVersion', value='21')/
+  preference(name='android-installLocation', value='auto')/
+
+  // iOS only
+  preference(name='target-device', value='handset')/
+  preference(name='exit-on-suspend', value='true')/
+
+  // cordova-plugin-splashscreen
+  preference(name='ShowSplashScreenSpinner', value='false')/
+  preference(name='AutoHideSplashScreen', value='false')/
+  // cordova-plugin-statusbar
+  preference(name='StatusBarBackgroundColor', value='#117fbb')/
+
+  // default icons and splash
+  icon(src='resources/icons/128.png')/
+  splash(src='resources/screens/android/hdpi.png')/
+
+  // Android icons and splash
+  icon(src='resources/icons/android/ldpi.png',    platform='android', qualifier='ldpi')/
+  icon(src='resources/icons/android/mdpi.png',    platform='android', qualifier='mdpi')/
+  icon(src='resources/icons/android/hdpi.png',    platform='android', qualifier='hdpi')/
+  icon(src='resources/icons/android/xhdpi.png',   platform='android', qualifier='xhdpi')/
+  icon(src='resources/icons/android/xxhdpi.png',  platform='android', qualifier='xxhdpi')/
+  icon(src='resources/icons/android/xxxhdpi.png', platform='android', qualifier='xxxhdpi')/
+
+  splash(src='resources/screens/android/hdpi.png',    platform='android', qualifier='hdpi')/
+  splash(src='resources/screens/android/ldpi.png',    platform='android', qualifier='ldpi')/
+  splash(src='resources/screens/android/mdpi.png',    platform='android', qualifier='mdpi')/
+  splash(src='resources/screens/android/xhdpi.png',   platform='android', qualifier='xhdpi')/
+  splash(src='resources/screens/android/xxhdpi.png',  platform='android', qualifier='xxhdpi')/
+  splash(src='resources/screens/android/xxxhdpi.png', platform='android', qualifier='xxxhdpi')/
+
+  // iOS icons and splash
+  icon(src='resources/icons/ios/icon-60.png',       platform='ios', width='60',   height='60')/
+  icon(src='resources/icons/ios/icon-60@2x.png',    platform='ios', width='120',  height='120')/
+  icon(src='resources/icons/ios/icon-60@3x.png',    platform='ios', width='180',  height='180')/
+  icon(src='resources/icons/ios/icon-76.png',       platform='ios', width='76',   height='76')/
+  icon(src='resources/icons/ios/icon-76@2x.png',    platform='ios', width='152',  height='152')/
+  icon(src='resources/icons/ios/icon-40.png',       platform='ios', width='40',   height="40")/
+  icon(src='resources/icons/ios/icon-40@2x.png',    platform='ios', width='80',   height="80")/
+  icon(src='resources/icons/ios/icon.png',          platform='ios', width='57',   height="57")/
+  icon(src='resources/icons/ios/icon@2x.png',       platform='ios', width='114',  height="114")/
+  icon(src='resources/icons/ios/icon-72.png',       platform='ios', width='72',   height="72")/
+  icon(src='resources/icons/ios/icon-72@2x.png',    platform='ios', width='144',  height="144")/
+  icon(src='resources/icons/ios/icon-small.png',    platform='ios', width='29',   height="29")/
+  icon(src='resources/icons/ios/icon-small@2x.png', platform='ios', width='58',   height="58")/
+  icon(src='resources/icons/ios/icon-50.png',       platform='ios', width='50',   height="50")/
+  icon(src='resources/icons/ios/icon-50@2x.png',    platform='ios', width='100',  height="100")/
+
+  splash(src='resources/screens/ios/Default.png',             platform='ios', width='320',   height='480')/
+  splash(src='resources/screens/ios/Default@2x.png',          platform='ios', width='640',   height='960')/
+  splash(src='resources/screens/ios/Default-568h@2x.png',     platform='ios', width='640',   height='1136')/
+  splash(src='resources/screens/ios/Default-667h@2x.png',     platform='ios', width='750',   height='1134')/
+  splash(src='resources/screens/ios/Default-736h@3x.png',     platform='ios', width='1242',  height='2208')/
+  splash(src='resources/screens/ios/Default-Portrait.png',    platform='ios', width='768',   height='1024')/
+  splash(src='resources/screens/ios/Default-Portrait@2x.png', platform='ios', width='1536',  height='2048')/
+
+  access(origin='*')/
+
+  allow-intent(href='http://*/*')/
+  allow-intent(href='https://*/*')/
+  allow-intent(href='tel:*')/
+  allow-intent(href='sms:*')/
+  allow-intent(href='mailto:*')/
+  allow-intent(href='geo:*')/
+
+  platform(name='android')
+    allow-intent(href='market:*')/
+
+  platform(name='ios')
+    allow-intent(href='itms:*')/
+    allow-intent(href='itms-apps:*')/

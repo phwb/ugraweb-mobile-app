@@ -307,9 +307,9 @@ app.initClickEvents = function () {
                 pushState: clickedData.pushState,
                 url: url
             };
-            if (app.params.mobile.host) {
-                options.url = app.params.mobile.host + url;
-            }
+            // if (app.params.mobile.host) {
+            //     options.url = app.params.mobile.host + url;
+            // }
 
             if (app.params.template7Pages) {
                 options.contextName = clickedData.contextName;

@@ -1,8 +1,8 @@
-'use strict'
-
 import del from 'del'
 import gulp from 'gulp'
 import gulplog from './node_modules/gulplog'
+import util from './node_modules/gulp-util'
+import rename from 'gulp-rename'
 import plumber from 'gulp-plumber'
 import notify from 'gulp-notify'
 import pug from 'gulp-pug'
@@ -10,7 +10,7 @@ import less from 'gulp-less'
 import LessAutoPrefix from 'less-plugin-autoprefix'
 import LessPluginCleanCSS from 'less-plugin-clean-css'
 import browserSync from 'browser-sync'
-import webpackStream from 'webpack-stream'
+import webpackStream, { webpack as wp } from 'webpack-stream'
 import named from 'vinyl-named'
 // config files
 import framework7 from './framework7/gulp.config'
@@ -18,9 +18,21 @@ import framework7 from './framework7/gulp.config'
 const plumberOptions = {
   errorHandler: notify.onError()
 }
-const develop = true
 
-const clean = () => del('./build')
+const {
+  env = 'development',
+  host = 'http://localhost',
+  platform = 'android'
+} = util.env
+
+const path = {
+  development: './build',
+  cordova: './cordova/www'
+}
+
+const develop = env === 'development'
+
+const clean = () => del(path[env])
 
 export const styles = () => {
   let autoPrefix = new LessAutoPrefix({
@@ -51,7 +63,7 @@ export const styles = () => {
       paths: ['node_modules'],
       plugins: plugins
     }))
-    .pipe(gulp.dest('./build/css'))
+    .pipe(gulp.dest(`${path[env]}/css`))
 }
 
 export const views = () => {
@@ -64,18 +76,16 @@ export const views = () => {
     .pipe(pug({
       pretty: develop,
       data: {
-        dev: develop
+        dev: develop,
+        cordova: env === 'cordova'
       }
     }))
-    .pipe(gulp.dest('./build'))
+    .pipe(gulp.dest(path[env]))
 }
 
 const webpack = (cb) => {
-  let wp = webpackStream.webpack
   let firstBuildReady = false
-  let NoErrorsPlugin = wp.NoErrorsPlugin
-  let Uglify = wp.optimize.UglifyJsPlugin
-  let DefinePlugin = wp.DefinePlugin
+  const { NoErrorsPlugin, DefinePlugin } = wp
 
   function done (err, stats) {
     firstBuildReady = true
@@ -89,9 +99,7 @@ const webpack = (cb) => {
     }))
   }
 
-  // тут нужно учитывать сборку под разные оси, и использовать полифилы
-  // например в коде я использую Promise, для андроида нужно загрузить полифил (наверное, практика покажет)
-  let options = {
+  const options = {
     watch: develop,
 
     output: {
@@ -113,22 +121,23 @@ const webpack = (cb) => {
       new NoErrorsPlugin(),
       new DefinePlugin({
         buildConfig: JSON.stringify({
-          // host: 'http://cafeassorti.ru',
-          // folder: '/mobile'
+          host: host,
+          debug: develop
         })
       })
     ]
   }
 
   if (!develop) {
-    options.plugins.push(new Uglify())
+    const { UglifyJsPlugin } = wp.optimize
+    options.plugins.push(new UglifyJsPlugin())
   }
 
   return gulp.src(['./src/scripts/main.js'])
     .pipe(plumber(plumberOptions))
     .pipe(named())
     .pipe(webpackStream(options, null, done))
-    .pipe(gulp.dest('./build/js'))
+    .pipe(gulp.dest(`${path[env]}/js`))
     .on('data', function () {
       if (firstBuildReady) {
         cb()
@@ -141,14 +150,14 @@ const watch = () => {
   gulp.watch('./src/styles/**/*.less', styles)
 }
 
-const serve = () => {
+export const serve = () => {
   let params = {
-    server: './build'
+    server: path.development
   }
 
   browserSync
     .init(params)
-    .watch('./build/**/*.*')
+    .watch(`${path.development}/**/*.*`)
     .on('change', browserSync.reload)
 }
 
@@ -156,8 +165,7 @@ const vendor = gulp.series(
   framework7,
   function copyJS () {
     let paths = [
-      './framework7/dist/js/framework7.min.js',
-      './framework7/dist/js/framework7.min.js.map'
+      './framework7/dist/js/framework7.min.js'
     ]
 
     if (develop) {
@@ -166,17 +174,48 @@ const vendor = gulp.series(
     }
 
     return gulp.src(paths)
-      .pipe(gulp.dest('./build/framework7/js'))
+      .pipe(gulp.dest(`${path[env]}/framework7/js`))
   },
   function copyCSS () {
     return gulp.src('./framework7/dist/css/framework7.material.min.css')
-      .pipe(gulp.dest('./build/framework7/css'))
+      .pipe(gulp.dest(`${path[env]}/framework7/css`))
   }
 )
 
 export const build = gulp.series(
   vendor,
   gulp.parallel(views, styles)
+)
+
+export const config = () => gulp.src(`./src/assets/config.pug`)
+  .pipe(plumber(plumberOptions))
+  .pipe(pug({
+    pretty: true
+  }))
+  .pipe(rename({
+    extname: '.xml'
+  }))
+  .pipe(gulp.dest(`${path.cordova}/..`))
+
+export const assets = gulp.series(
+  function clearResources () {
+    return del(`${path[env]}/../resources`)
+  },
+  function copyResources () {
+    return gulp.src(`./src/assets/resources/**/*`)
+      .pipe(gulp.dest(`${path[env]}/../resources`))
+  }
+)
+
+export const dist = gulp.series(
+  clean,
+  function cleanConfig () {
+    return del(`${path.cordova}/../config.xml`)
+  },
+  config,
+  assets,
+  build,
+  webpack
 )
 
 export default gulp.series(

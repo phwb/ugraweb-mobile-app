@@ -17,7 +17,9 @@ $.ajax = function (options) {
         cache: true,
         user: '',
         password: '',
-        headers: {},
+        headers: {
+          'X-Application': 'uwa'
+        },
         xhrFields: {},
         statusCode: {},
         processData: true,

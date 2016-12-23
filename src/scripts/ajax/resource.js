@@ -1,5 +1,3 @@
-'use strict'
-
 let timestamp = Date.now()
 
 function getTagName (tagName) {

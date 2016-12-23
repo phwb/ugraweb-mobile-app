@@ -1,7 +1,7 @@
 doctype
 html
   head
-    title Ugraweb Mobile Application
+    title Cafeassorti
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui')
     link(rel='stylesheet', href='framework7/css/framework7.material.min.css')
@@ -16,17 +16,9 @@ html
           .page(data-page='panel-left')
 
     .views
-      //.view.view-main
-        .pages.navbar-fixed
-
-    .login-screen.modal-in
-      .view
-        .page(data-page='splash-screen')
-          .page-content.login-screen-content
-            .login-screen-title Загрузка...
-            .list-block-label
-              p Лоадер, пока грузится индексная страница
 
     - var script = dev ? 'framework7.js' : 'framework7.min.js'
+    if (cordova)
+      script(src='cordova.js')
     script(src='framework7/js/' + script)
     script(src='js/main.js')
