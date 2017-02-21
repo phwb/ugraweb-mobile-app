@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dist": "gulp dist --env=cordova --host=http://cafeassorti.ru",
-    "dist-dev": "gulp dist --env=cordova --host=http://192.168.1.45",
+    "dist-dev": "gulp dist --env=cordova --host=http://cafeassorti.probitrix.com",
     "start": "gulp --env=development --host=http://cafe.loc"
   },
   "devDependencies": {

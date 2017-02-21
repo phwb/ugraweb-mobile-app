@@ -99,8 +99,7 @@ const init = () => {
     .then(() => {
       app = new Framework7({
         init: false,
-        material: true,
-        swipePanel: 'left'
+        material: true
       })
     })
     // добавляем в кеш индексную страницу
